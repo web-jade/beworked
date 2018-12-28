@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import Home from './views/Home'
 import Auth from './views/Auth'
+import Account from './views/Account'
 
 Vue.use(Router)
 
@@ -17,6 +18,11 @@ export default new Router({
             path: '/auth',
             name: 'Auth',
             component: Auth
+        },
+        {
+            path: '/account',
+            name: 'Account',
+            component: Account
         }
     ]
 })

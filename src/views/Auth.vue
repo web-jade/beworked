@@ -3,7 +3,7 @@
     <p v-if="errorMessage">
       Error: {{ errorMessage }}
     </p>
-    <form @submit.prevent="onSubmit()">
+    <form @submit.prevent="onLogin()">
       <input
         v-model="form.email"
         type="text"
@@ -17,6 +17,22 @@
       <input
         type="submit"
         value="Войти"
+      >
+    </form>
+    <form @submit.prevent="onRegister()">
+      <input
+        v-model="form.email"
+        type="text"
+        placeholder="Почта"
+      >
+      <input
+        v-model="form.password"
+        type="text"
+        placeholder="Пароль"
+      >
+      <input
+        type="submit"
+        value="Регистрация"
       >
     </form>
   </div>
@@ -34,8 +50,13 @@
                 }
             }
         },
+        created () {
+            if (this.$store.getters.getAuth) {
+                this.$router.push('/account')
+            }
+        },
         methods: {
-            onSubmit: function () {
+            onLogin: function () {
                 if (this.form.email.length > 0 && this.form.password.length > 0) {
                     const user = {
                         email: this.form.email,
@@ -43,11 +64,26 @@
                     }
                   this.$store.dispatch('loadingUser', user)
                       .then(() => {
-                          console.log(this.$store.getters.getUser)
+                          this.$router.push('/account')
                       })
                       .catch(error => {
                           this.errorMessage = error.message
                       })
+                }
+            },
+            onRegister: function () {
+                if (this.form.email.length > 0 && this.form.password.length > 0) {
+                    const user = {
+                        email: this.form.email,
+                        password: this.form.password
+                    }
+                    this.$store.dispatch('registerUser', user)
+                        .then(() => {
+                            this.$router.push('/account')
+                        })
+                        .catch(error => {
+                            this.errorMessage = error.message
+                        })
                 }
             }
         }
