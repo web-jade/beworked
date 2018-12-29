@@ -19,7 +19,6 @@ export default {
     actions: {
         async loadingUser ({ commit }, { email, password }) {
             const response = await firebase.auth().signInWithEmailAndPassword(email, password)
-            console.log(response)
             try {
                 commit('loadUserData', new User(response.user.uid))
             } catch (e) {
@@ -28,7 +27,6 @@ export default {
         },
         async registerUser ({ commit }, { email, password }) {
             const response = await firebase.auth().createUserWithEmailAndPassword(email, password)
-            console.log(response)
             try {
                 commit('loadUserData', new User(response.user.uid))
             } catch (e) {
