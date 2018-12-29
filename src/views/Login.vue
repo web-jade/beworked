@@ -2,6 +2,7 @@
   <div class="b-login-page">
     <LandingHeader />
     <form
+      v-if="!emailVerification"
       class="container b-login-page__section"
       @submit.prevent="onSubmit()"
     >
@@ -13,6 +14,7 @@
         <BInput
           v-model="form.email"
           type="email"
+          autocomplete="email"
         />
       </BField>
 
@@ -20,15 +22,29 @@
         <BInput
           v-model="form.password"
           type="password"
+          autocomplete="current-password"
         />
       </BField>
 
       <input
-        class="button"
+        class="button is-primary is-rounded"
         type="submit"
-        value="Login"
+        :value="getLoading === true ? 'Loading...' : 'Login'"
+        :disabled="getLoading"
       >
     </form>
+    <!-- hidden -->
+    <div
+      v-if="emailVerification"
+      class="container box b-register-page__confirm"
+    >
+      <h1 class="title has-text-centered">
+        Confirm you mail
+      </h1>
+      <p class="has-text-centered">
+        A secret code was sent to the specified mail. Please confirm your mail
+      </p>
+    </div>
   </div>
 </template>
 
@@ -43,10 +59,16 @@
         components: {BInput, BField, LandingHeader},
         data () {
             return {
+                emailVerification: false,
                 form: {
-                    email: '',
-                    password: ''
+                    email: 'web-kostrov@yandex.ru',
+                    password: '159753123QwE'
                 }
+            }
+        },
+        computed: {
+            getLoading: function () {
+                return this.$store.getters.getLoading
             }
         },
         created () {
@@ -63,7 +85,18 @@
                     }
                     this.$store.dispatch('loadingUser', user)
                         .then(() => {
-                            this.$router.push('/account')
+                            if (this.$store.getters.getUser.emailVerified) {
+                                if (this.$store.getters.getUser.confirmRegistration === false) {
+                                    this.$router.push('/account/create')
+                                }
+                                else {
+                                    this.$router.push('/account')
+                                }
+                            }
+                            else {
+                                this.emailVerification = true
+                                this.$store.commit('logoutUser')
+                            }
                         })
                         .catch(error => {
                             Snackbar.open({

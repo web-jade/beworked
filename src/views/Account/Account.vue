@@ -9,16 +9,7 @@
 
     export default {
         name: "Account",
-        components: {LandingHeader},
-        data () {
-            return {}
-        },
-        created () {
-            if (!this.$store.getters.getAuth) {
-                this.$router.push('/login')
-            }
-        },
-        methods: {}
+        components: {LandingHeader}
     }
 </script>
 

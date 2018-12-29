@@ -2,19 +2,13 @@
   <div class="b-register-page">
     <LandingHeader />
     <form
-      class="container b-register-page__section"
+      v-show="!isCodeSent"
+      class="container box b-register-page__section"
       @submit.prevent="onSubmit()"
     >
       <h1 class="title has-text-centered">
         Registration
       </h1>
-
-      <BField label="Username">
-        <BInput
-          v-model="form.username"
-          type="text"
-        />
-      </BField>
 
       <BField label="Email">
         <BInput
@@ -31,11 +25,24 @@
       </BField>
 
       <input
-        class="button"
+        class="button is-primary is-rounded"
         type="submit"
-        value="Register"
+        :value="getLoading === true ? 'Loading...' : 'Register'"
+        :disabled="getLoading"
       >
     </form>
+    <!-- hidden -->
+    <div
+      v-show="isCodeSent"
+      class="container box b-register-page__confirm"
+    >
+      <h1 class="title has-text-centered">
+        Confirm you mail
+      </h1>
+      <p class="has-text-centered">
+        A secret code was sent to the specified mail. Please confirm your mail
+      </p>
+    </div>
   </div>
 </template>
 
@@ -50,11 +57,16 @@
         components: {BInput, BField, LandingHeader},
         data () {
             return {
+                isCodeSent: false,
                 form: {
-                    username: '',
-                    email: '',
-                    password: ''
+                    email: 'web-kostrov@yandex.ru',
+                    password: '159753123QwE'
                 }
+            }
+        },
+        computed: {
+            getLoading: function () {
+                return this.$store.getters.getLoading
             }
         },
         created () {
@@ -64,15 +76,14 @@
         },
         methods: {
             onSubmit: function () {
-                if (this.form.username.length > 0 && this.form.email.length > 0 && this.form.password.length > 0) {
+                if (this.form.email.length > 0 && this.form.password.length > 0) {
                     const user = {
-                        username: this.form.username,
                         email: this.form.email,
                         password: this.form.password
                     }
                     this.$store.dispatch('registerUser', user)
                         .then(() => {
-                            this.$router.push('/account')
+                          this.isCodeSent = true
                         })
                         .catch(error => {
                             Snackbar.open({
@@ -89,12 +100,18 @@
 </script>
 
 <style lang="scss">
-    .b-register-page__section {
-      max-width: 450px;
-      margin: 40px auto 0 auto;
+  .b-register-page__section {
+    max-width: 450px;
+    margin: 40px auto 0 auto;
+  }
 
-      padding: 20px;
-      border-radius: 5px;
-      background-color: #fff;
-    }
+  .b-register-page__confirm {
+    max-width: 500px;
+    margin: 40px auto 0 auto;
+  }
+
+  .b-register-page__resend {
+    display: table;
+    margin: 15px auto 0 auto;
+  }
 </style>

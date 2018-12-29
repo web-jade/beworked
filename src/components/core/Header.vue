@@ -37,6 +37,13 @@
           >
             Account
           </RouterLink>
+          <RouterLink
+            v-if="getAuth"
+            to="/profile"
+            class="navbar-item"
+          >
+            Profile
+          </RouterLink>
         </div>
 
         <div class="navbar-end">
@@ -47,13 +54,13 @@
             <div class="buttons">
               <RouterLink
                 to="/login"
-                class="button is-light"
+                class="button is-light is-rounded"
               >
                 Sign in
               </RouterLink>
               <RouterLink
                 to="/register"
-                class="button is-primary"
+                class="button is-primary is-rounded"
               >
                 Sign up
               </RouterLink>
@@ -65,7 +72,7 @@
           >
             <div class="buttons">
               <a
-                class="button is-primary"
+                class="button is-primary is-rounded"
                 @click="onLogout()"
               >
                 Log out
