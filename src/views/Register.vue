@@ -1,59 +1,59 @@
 <template>
-  <div class="RegisterPage">
+  <div class="b-register-page">
     <LandingHeader />
-    <div
-      is="sui-container"
-      class="RegisterPage__wrapper"
+    <form
+      class="container b-register-page__section"
+      @submit.prevent="onSubmit()"
     >
-      <SuiSegment>
-        <SuiMessage
-          v-if="error.visible"
-          header="Error"
-          :content="error.message"
-          dismissable
-          @dismiss="handleDismiss"
+      <h1 class="title has-text-centered">
+        Registration
+      </h1>
+
+      <BField label="Username">
+        <BInput
+          v-model="form.username"
+          type="text"
         />
-        <h1 is="sui-header">
-          Register
-        </h1>
-        <SuiForm @submit.prevent="onSubmit()">
-          <SuiFormField>
-            <label>E-mail</label>
-            <input
-              v-model="form.email"
-              type="email"
-            >
-          </SuiFormField>
-          <SuiFormField>
-            <label>Password</label>
-            <input
-              v-model="form.password"
-              type="password"
-            >
-          </SuiFormField>
-          <SuiButton type="submit">
-            Submit
-          </SuiButton>
-        </SuiForm>
-      </SuiSegment>
-    </div>
+      </BField>
+
+      <BField label="Email">
+        <BInput
+          v-model="form.email"
+          type="email"
+        />
+      </BField>
+
+      <BField label="Password">
+        <BInput
+          v-model="form.password"
+          type="password"
+        />
+      </BField>
+
+      <input
+        class="button"
+        type="submit"
+        value="Register"
+      >
+    </form>
   </div>
 </template>
 
 <script>
-    import LandingHeader from "@/components/core/Header";
+    import { Snackbar } from 'buefy/dist/components/snackbar'
+    import LandingHeader from "@/components/core/Header"
+    import BField from "buefy/src/components/field/Field"
+    import BInput from "buefy/src/components/input/Input"
+
     export default {
         name: "Register",
-        components: {LandingHeader},
+        components: {BInput, BField, LandingHeader},
         data () {
             return {
                 form: {
+                    username: '',
                     email: '',
                     password: ''
-                },
-                error: {
-                    visible: false,
-                    message: null
                 }
             }
         },
@@ -64,8 +64,9 @@
         },
         methods: {
             onSubmit: function () {
-                if (this.form.email.length > 0 && this.form.password.length > 0) {
+                if (this.form.username.length > 0 && this.form.email.length > 0 && this.form.password.length > 0) {
                     const user = {
+                        username: this.form.username,
                         email: this.form.email,
                         password: this.form.password
                     }
@@ -74,20 +75,26 @@
                             this.$router.push('/account')
                         })
                         .catch(error => {
-                            this.error.visible = true
-                            this.error.message = error.message
+                            Snackbar.open({
+                                message: error.message,
+                                position: 'is-top',
+                                actionText: 'Close',
+                                duration: 5000
+                            })
                         })
                 }
-            },
-            handleDismiss() {
-                this.error.visible = false
             }
         }
     }
 </script>
 
 <style lang="scss">
-    .RegisterPage__wrapper {
-        margin-top: 40px;
+    .b-register-page__section {
+      max-width: 450px;
+      margin: 40px auto 0 auto;
+
+      padding: 20px;
+      border-radius: 5px;
+      background-color: #fff;
     }
 </style>

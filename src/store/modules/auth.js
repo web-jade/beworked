@@ -25,7 +25,7 @@ export default {
                 throw e
             }
         },
-        async registerUser ({ commit }, { email, password }) {
+        async registerUser ({ commit }, { username, email, password }) {
             const response = await firebase.auth().createUserWithEmailAndPassword(email, password)
             try {
                 commit('loadUserData', new User(response.user.uid))

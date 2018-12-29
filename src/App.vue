@@ -13,7 +13,7 @@ export default {
 <style lang="scss">
   #app {
     min-height: 100vh;
-    background: #edeef0;
+    background: #7957d5;
     color: #000;
     margin: 0;
     padding: 0;

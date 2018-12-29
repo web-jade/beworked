@@ -1,75 +1,81 @@
 <template>
-  <div class="LandingHeader">
-    <div
-      is="sui-container"
-      class="LandingHeader__container"
-    >
-      <div class="LandingHeader__grid">
-        <RouterLink
-          to="/"
-          class="LandingHeader__logo"
+  <nav
+    class="navbar"
+    role="navigation"
+    aria-label="main navigation"
+  >
+    <div class="container">
+      <div class="navbar-brand">
+        <a
+          role="button"
+          class="navbar-burger burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navbarBasicExample"
         >
-          Beworked
-        </RouterLink>
-        <SuiMenu
-          secondary
-          class="LandingHeader__menu"
-        >
-          <RouterLink to="/">
-            <SuiMenuItem
-              link
-              name="Home"
-            >
-              Home
-            </SuiMenuItem>
-          </RouterLink>
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+        </a>
+      </div>
+
+      <div
+        id="navbarBasicExample"
+        class="navbar-menu"
+      >
+        <div class="navbar-start">
           <RouterLink
-            v-if="!getAuth"
-            to="/login"
+            to="/"
+            class="navbar-item"
           >
-            <SuiMenuItem
-              link
-              name="Login"
-            >
-              Login
-            </SuiMenuItem>
-          </RouterLink>
-          <RouterLink
-            v-if="!getAuth"
-            to="/register"
-          >
-            <SuiMenuItem
-              link
-              name="Register"
-            >
-              Register
-            </SuiMenuItem>
+            Home
           </RouterLink>
           <RouterLink
             v-if="getAuth"
             to="/account"
+            class="navbar-item"
           >
-            <SuiMenuItem
-              link
-              name="Account"
-            >
-              Account
-            </SuiMenuItem>
+            Account
           </RouterLink>
-          <RouterLink to="/">
-            <SuiMenuItem
-              v-if="getAuth"
-              link
-              name="Logout"
-              @click="onLogout()"
-            >
-              Logout
-            </SuiMenuItem>
-          </RouterLink>
-        </SuiMenu>
+        </div>
+
+        <div class="navbar-end">
+          <div
+            v-if="!getAuth"
+            class="navbar-item"
+          >
+            <div class="buttons">
+              <RouterLink
+                to="/login"
+                class="button is-light"
+              >
+                Sign in
+              </RouterLink>
+              <RouterLink
+                to="/register"
+                class="button is-primary"
+              >
+                Sign up
+              </RouterLink>
+            </div>
+          </div>
+          <div
+            v-if="getAuth"
+            class="navbar-item"
+          >
+            <div class="buttons">
+              <a
+                class="button is-primary"
+                @click="onLogout()"
+              >
+                Log out
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+  </nav>
 </template>
 
 <script>
@@ -90,30 +96,5 @@
 </script>
 
 <style lang="scss">
-    .LandingHeader {
-        width: 100%;
-        height: 60px;
 
-        background-color: #fff;
-    }
-
-    .LandingHeader__container {
-        height: 100%;
-    }
-
-    .LandingHeader__grid {
-        height: 100%;
-        display: flex;
-        align-items: center;
-    }
-
-    .LandingHeader__logo {
-        color: #000;
-        font-size: 24px;
-        font-weight: bold;
-    }
-
-    .LandingHeader__menu.ui.secondary.menu {
-        margin: 0 0 0 auto;
-    }
 </style>
