@@ -12,6 +12,22 @@
         <div class="column">
           <div class="field">
             <label class="label">
+              Display name
+            </label>
+            <div class="control">
+              <input
+                v-model="form.displayName"
+                class="input"
+                type="text"
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column">
+          <div class="field">
+            <label class="label">
               First name
             </label>
             <div class="control">
@@ -59,6 +75,7 @@
         data () {
             return {
                 form: {
+                    displayName: '',
                     firstName: '',
                     lastName: ''
                 }
@@ -76,8 +93,9 @@
         },
         methods: {
             onSubmit: function () {
-                if (this.form.firstName.length > 0 && this.form.lastName.length > 0) {
+                if (this.form.displayName.length > 0 && this.form.firstName.length > 0 && this.form.lastName.length > 0) {
                     const userAdditionalInformation = {
+                        displayName: this.form.displayName,
                         firstName: this.form.firstName,
                         lastName: this.form.lastName
                     }

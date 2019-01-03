@@ -59,7 +59,7 @@
             return {
                 isCodeSent: false,
                 form: {
-                    email: 'web-kostrov@yandex.ru',
+                    email: 'ergerger3e@cliptik.net',
                     password: '159753123QwE'
                 }
             }

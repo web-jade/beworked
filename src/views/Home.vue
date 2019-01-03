@@ -10,6 +10,9 @@
           <h2 class="subtitle">
             Employee accounting service
           </h2>
+          <button @click="$store.commit('setLoading')">
+            restore
+          </button>
         </div>
       </div>
     </section>

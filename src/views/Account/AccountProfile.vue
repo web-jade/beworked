@@ -7,6 +7,19 @@
         Profile
       </h1>
       <form>
+        <div class="field">
+          <label class="label">
+            Username
+          </label>
+          <div class="control">
+            <input
+              class="input"
+              type="text"
+              :value="$store.getters.getUser.displayName"
+              disabled
+            >
+          </div>
+        </div>
         <div class="columns">
           <div class="column">
             <div class="field">
@@ -17,6 +30,7 @@
                 <input
                   class="input"
                   type="text"
+                  :value="$store.getters.getUser.firstName"
                 >
               </div>
             </div>
@@ -30,20 +44,10 @@
                 <input
                   class="input"
                   type="text"
+                  :value="$store.getters.getUser.lastName"
                 >
               </div>
             </div>
-          </div>
-        </div>
-        <div class="field">
-          <label class="label">
-            Username
-          </label>
-          <div class="control">
-            <input
-              class="input"
-              type="text"
-            >
           </div>
         </div>
         <div class="field">
@@ -59,38 +63,8 @@
             >
           </div>
         </div>
-        <div class="columns">
-          <div class="column">
-            <div class="field">
-              <label class="label">
-                Current password
-              </label>
-              <div class="control">
-                <input
-                  class="input"
-                  type="password"
-                  autocomplete="current-password"
-                >
-              </div>
-            </div>
-          </div>
-          <div class="column">
-            <div class="field">
-              <label class="label">
-                New password
-              </label>
-              <div class="control">
-                <input
-                  class="input"
-                  type="password"
-                  autocomplete="new-password"
-                >
-              </div>
-            </div>
-          </div>
-        </div>
         <input
-          class="button is-link is-fullwidth"
+          class="button is-rounded is-link is-fullwidth"
           type="submit"
           value="Update"
         >
@@ -103,7 +77,7 @@
     import Header from '@/components/core/Header'
 
     export default {
-        name: "Profile",
+        name: "AccountProfile",
         components: {
             Header
         },
@@ -118,6 +92,10 @@
             }
         },
         created () {
+            if (!this.$store.getters.isUserConfirmAccount) {
+                this.$router.push('/account/create')
+            }
+
             this.loadUserData()
         },
         methods: {

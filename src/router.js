@@ -5,9 +5,10 @@ import Home from './views/Home'
 import AccountEntryPoint from './views/Account/AccountEntryPoint'
 import Account from './views/Account/Account'
 import AccountCreate from './views/Account/AccountCreate'
+import AccountProjects from './views/Account/AccountProjects'
+import AccountProfile from './views/Account/AccountProfile'
 import Login from './views/Login'
 import Register from './views/Register'
-import Profile from './views/Profile'
 
 Vue.use(Router)
 
@@ -42,13 +43,18 @@ export default new Router({
                     path: 'create',
                     name: 'AccountCreate',
                     component: AccountCreate,
+                },
+                {
+                    path: 'projects',
+                    name: 'AccountProjects',
+                    component: AccountProjects,
+                },
+                {
+                    path: 'profile',
+                    name: 'AccountProfile',
+                    component: AccountProfile,
                 }
             ]
-        },
-        {
-            path: '/profile',
-            name: 'Profile',
-            component: Profile
         }
     ]
 })

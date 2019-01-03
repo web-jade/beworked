@@ -44,6 +44,13 @@
       <p class="has-text-centered">
         A secret code was sent to the specified mail. Please confirm your mail
       </p>
+      <button
+        type="button"
+        class="button is-center b-register-page__confirm-resend"
+        @click="onClickResendConfirm()"
+      >
+        {{ getResendDelayLabel }}
+      </button>
     </div>
   </div>
 </template>
@@ -60,8 +67,9 @@
         data () {
             return {
                 emailVerification: false,
+                resendDelay: 0,
                 form: {
-                    email: 'web-kostrov@yandex.ru',
+                    email: 'ergerger3e@cliptik.net',
                     password: '159753123QwE'
                 }
             }
@@ -69,6 +77,14 @@
         computed: {
             getLoading: function () {
                 return this.$store.getters.getLoading
+            },
+            getResendDelayLabel: function () {
+                if (this.resendDelay === 0) {
+                    return 'Resend email confirm'
+                }
+                else {
+                    return `Resend email confirm (${this.resendDelay} сек.)`
+                }
             }
         },
         created () {
@@ -107,19 +123,52 @@
                             })
                         })
                 }
+            },
+            onClickResendConfirm: function () {
+                if (this.resendDelay === 0) {
+                    console.log(this.$store.getters.getUser)
+                    this.$store.dispatch('resendEmailConfirm')
+                        .then(() => {
+                            Snackbar.open({
+                                message: 'Check you email',
+                                position: 'is-top',
+                                actionText: 'Close',
+                                duration: 5000
+                            })
+                        })
+                        .catch(error => {
+                            Snackbar.open({
+                                message: error.message,
+                                position: 'is-top',
+                                actionText: 'Close',
+                                duration: 5000
+                            })
+                        })
+                    this.resendDelay = 60
+                    let interval = setInterval(() => {
+                        this.resendDelay--
+                    }, 1000)
+                    setTimeout(() => {
+                        clearInterval(interval)
+                        this.resendDelay = 0
+                    }, 60000)
+                }
             }
         }
     }
 </script>
 
 <style lang="scss">
+    .b-login-page__section {
+        max-width: 450px;
+        margin: 40px auto 0 auto;
 
-  .b-login-page__section {
-    max-width: 450px;
-    margin: 40px auto 0 auto;
-
-    padding: 20px;
-    border-radius: 5px;
-    background-color: #fff;
-  }
+        padding: 20px;
+        border-radius: 5px;
+        background-color: #fff;
+    }
+    .b-register-page__confirm-resend {
+        display: table;
+        margin: 15px auto 0 auto;
+    }
 </style>

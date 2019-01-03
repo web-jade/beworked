@@ -39,7 +39,7 @@
           </RouterLink>
           <RouterLink
             v-if="getAuth"
-            to="/profile"
+            to="/account/profile"
             class="navbar-item"
           >
             Profile

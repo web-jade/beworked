@@ -9,7 +9,12 @@
 
     export default {
         name: "Account",
-        components: {LandingHeader}
+        components: {LandingHeader},
+        created () {
+            if (!this.$store.getters.isUserConfirmAccount) {
+                this.$router.push('/account/create')
+            }
+        }
     }
 </script>
 

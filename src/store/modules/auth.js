@@ -8,10 +8,6 @@ export default {
         loading: false
     },
     mutations: {
-        loadUserData: (state, payload) => {
-            state.user = payload
-            state.auth = true
-        },
         logoutUser: state => {
             state.user = null
             state.auth = null
@@ -19,36 +15,32 @@ export default {
         setLoading: state => {
             state.loading = !state.loading
         },
-        addUserData (state, data) {
-            state.user.payload.push(data)
+        setUser: (state, payload) => {
+            state.user = payload
+            state.auth = true
         }
     },
-    actions: { // нужно загрузить дополнительные поля
+    actions: {
         async loadingUser ({ commit }, { email, password }) {
             commit('setLoading')
             try {
-                // Loading user
-                const response = await firebase.auth().signInWithEmailAndPassword(email, password)
+                const authentication = await firebase.auth().signInWithEmailAndPassword(email, password)
+                const database = await firebase.database().ref(`users/${authentication.user.uid}`).once('value')
 
-                // Loading user confirm registration
-                let confirmRegistration = null
-
-                const confirm = await firebase.database().ref('users/' + response.user.uid).once('value')
-                Object.keys(confirm.val()).forEach(key => {
-                    confirmRegistration = confirm.val()[key].confirmRegistration
+                commit('setUser', {
+                    id: authentication.user.uid,
+                    email: authentication.user.email,
+                    emailVerified: authentication.user.emailVerified,
+                    displayName: authentication.user.displayName,
+                    confirmRegistration: database.val().confirmRegistration,
+                    firstName: database.val().firstName,
+                    lastName: database.val().lastName
                 })
-
-                commit('loadUserData', new User({
-                    id: response.user.uid,
-                    email: response.user.email,
-                    displayName: response.user.displayName,
-                    emailVerified: response.user.emailVerified,
-                    confirmRegistration: confirmRegistration
-                }))
 
                 commit('setLoading')
             } catch (e) {
                 commit('setLoading')
+                console.log(e)
                 throw e
             }
         },
@@ -56,10 +48,10 @@ export default {
             commit('setLoading')
             try {
                 const response = await firebase.auth().createUserWithEmailAndPassword(email, password)
-                await firebase.database().ref('users/' + response.user.uid).push({
+                await firebase.database().ref('users/' + response.user.uid).set({
                     confirmRegistration: false,
-                    firstName: null,
-                    lastName: null
+                    firstName: false,
+                    lastName: false
                 })
                 this.dispatch('sendUserEmailVerification', email)
                 commit('setLoading')
@@ -82,7 +74,7 @@ export default {
                 throw e
             }
         },
-        async confirmUserRegistration ({ commit }, { firstName, lastName }) {
+        async confirmUserRegistration ({ commit }, { displayName, firstName, lastName }) {
             commit('setLoading')
             try {
                 await firebase.database().ref('users/' + this.getters.getUser.id).set({
@@ -90,24 +82,36 @@ export default {
                     firstName: firstName,
                     lastName: lastName
                 })
-                commit('addUserData', {
-                    confirmRegistration: true
-                })
                 commit('setLoading')
             } catch (e) {
                 commit('setLoading')
+            }
+        },
+        async resendEmailConfirm ({ commit }) {
+            commit('setLoading')
+            try {
+                console.log(this.getters.getUser)
+                await firebase.auth().sendPasswordResetEmail(email)
+                commit('setLoading')
+            } catch (e) {
+                commit('setLoading')
+                console.log(e)
+                throw e
             }
         }
     },
     getters: {
         getUser: state => {
-            return state.user.payload
+            return state.user
         },
         getAuth: state => {
             return state.auth
         },
         getLoading: state => {
             return state.loading
+        },
+        isUserConfirmAccount: state => {
+            return state.user.confirmRegistration
         }
     }
 }
