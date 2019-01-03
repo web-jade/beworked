@@ -4,16 +4,12 @@ import User from './user'
 export default {
     state: {
         user: null,
-        auth: false,
-        loading: false
+        auth: false
     },
     mutations: {
         logoutUser: state => {
             state.user = null
             state.auth = null
-        },
-        setLoading: state => {
-            state.loading = !state.loading
         },
         setUser: (state, payload) => {
             state.user = payload
@@ -106,9 +102,6 @@ export default {
         },
         getAuth: state => {
             return state.auth
-        },
-        getLoading: state => {
-            return state.loading
         },
         isUserConfirmAccount: state => {
             return state.user.confirmRegistration

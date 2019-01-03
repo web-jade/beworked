@@ -9,6 +9,8 @@ import AccountProjects from './views/Account/AccountProjects'
 import AccountProfile from './views/Account/AccountProfile'
 import Login from './views/Login'
 import Register from './views/Register'
+import ProjectEntryPoint from './views/Project/ProjectEntryPoint'
+import ProjectCreate from './views/Project/ProjectCreate'
 
 Vue.use(Router)
 
@@ -53,6 +55,18 @@ export default new Router({
                     path: 'profile',
                     name: 'AccountProfile',
                     component: AccountProfile,
+                }
+            ]
+        },
+        {
+            path: '/project',
+            name: 'ProjectEntryPoint',
+            component: ProjectEntryPoint,
+            children: [
+                {
+                    path: 'create',
+                    name: 'ProjectCreate',
+                    component: ProjectCreate,
                 }
             ]
         }
