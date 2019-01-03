@@ -11,10 +11,12 @@ import Login from './views/Login'
 import Register from './views/Register'
 import ProjectEntryPoint from './views/Project/ProjectEntryPoint'
 import ProjectCreate from './views/Project/ProjectCreate'
+import ProjectItem from './views/Project/ProjectItem'
 
 Vue.use(Router)
 
 export default new Router({
+    mode: 'history',
     routes: [
         {
             path: '/',
@@ -64,9 +66,22 @@ export default new Router({
             component: ProjectEntryPoint,
             children: [
                 {
+                    path: '',
+                    redirect: Account
+                },
+                {
                     path: 'create',
                     name: 'ProjectCreate',
                     component: ProjectCreate,
+                },
+                {
+                    path: ':creator/:project',
+                    name: 'ProjectItem',
+                    component: ProjectItem,
+                },
+                {
+                    path: '*',
+                    redirect: Account
                 }
             ]
         }

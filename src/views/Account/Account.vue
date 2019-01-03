@@ -15,7 +15,7 @@
       <RouterLink
         v-for="item in getProjects"
         :key="item.name"
-        to="/"
+        :to="getProjectUrl(item.name)"
         class="box b-project"
       >
         <span class="b-project__heading">
@@ -25,6 +25,9 @@
           Budget: {{ item.budget }}
         </span>
       </RouterLink>
+      <strong v-if="getProjects.length === 0">
+        You don't haw active project
+      </strong>
     </div>
   </div>
 </template>
@@ -59,6 +62,11 @@
                         duration: 5000
                     })
                 })
+        },
+        methods: {
+            getProjectUrl: function (name) {
+                return `/project/${this.$store.getters.getUser.id}/${name}`
+            }
         }
     }
 </script>

@@ -37,14 +37,50 @@ export default {
                         new Project(
                             data.val()[item].name,
                             data.val()[item].budget,
-                            data.val()[item].creator
+                            data.val()[item].creator,
+                            data.val()[item].tasks
                         )
                     )
                 }
-
                 commit('addProjects', projects)
 
-                console.log(this.getters.getProjects)
+                commit('setLoading')
+            } catch (e) {
+                console.log(e)
+                commit('setLoading')
+                throw e
+            }
+        },
+        async createTask ({ commit }, { creator, projectName, taskName }) {
+            commit('setLoading')
+            try {
+                await firebase.database().ref(`projects/${creator}/${projectName}/tasks`).push({
+                    taskName: taskName
+                })
+
+                this.dispatch('loadProjects', { creator: creator })
+
+                commit('setLoading')
+            } catch (e) {
+                console.log(e)
+                commit('setLoading')
+                throw e
+            }
+        },
+        async deleteTask ({ commit }, { creator, projectName, taskName }) { // удаление тасков нужно доделать
+            commit('setLoading')
+
+            const tasks = await firebase.database().ref(`projects/${creator}/${projectName}/tasks`).once('value')
+
+            for (let item in tasks.val()) {
+                if (tasks.val()[item].taskName === taskName) {
+                    await firebase.database().ref(`projects/${creator}/${projectName}/tasks`).child(item).remove()
+                }
+            }
+
+            this.dispatch('loadProjects', { creator: creator })
+
+            try {
 
                 commit('setLoading')
             } catch (e) {
@@ -57,6 +93,11 @@ export default {
     getters: {
         getProjects: state => {
             return state.projects
+        },
+        getProjectByName: function (state) {
+            return projectName => state.projects.filter(item => {
+                return item.name === projectName
+            })
         }
     }
 }

@@ -2,10 +2,12 @@ export default class Project {
     constructor(
         name,
         budget,
-        creator
+        creator,
+        tasks
     ) {
         this.name = name
         this.budget = budget
         this.creator = creator
+        this.tasks = tasks
     }
 }
